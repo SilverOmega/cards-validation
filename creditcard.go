@@ -186,6 +186,8 @@ func (c *Card) BrandValidate() (Company, error) {
 	case ccDigits.At(1) == 4:
 		return Company{"visa", "Visa"}, nil
 
+	case ccDigits.At(3) == 636 && ccLen >= 16 && ccLen <= 19:
+		return Company{"paypal", "PayPal"}, nil
 	default:
 		return Company{"", ""}, errors.New("Unknow Credit Card Brand")
 	}
