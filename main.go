@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	_ "net/http"
+	"time"
 )
 
 func main() {
@@ -25,8 +26,20 @@ func HelloServer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
 }
 
+// net/http just support GET, POST, HEAD " http.Get, http.Post, http.Post"
+type CatFact struct{}
+
 func CatFacts(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get("https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=29")
+
+	//use http.NewRequest to create new Request
+	var client = &http.Client{}
+	req, err := http.NewRequest("GET", "...", nil)
+	req.Header.Add("If-None-Match", `W/"wyzzy"`)
+	resp, err = client.Do(req)
+	// create Clienst and call method Get, Post, Head
+	var clients = &http.Client{Timeout: 10 * time.Second}
+	resp, err = clients.Get("...")
 	if err != nil {
 		log.Printf("Error getting data %s", err.Error())
 	}
